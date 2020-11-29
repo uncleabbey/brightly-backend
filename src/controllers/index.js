@@ -1,3 +1,3 @@
-import { registerStudent, registerTeacher } from "./user";
+import { registerStudent, registerTeacher, loginUser } from "./user";
 
-export { registerStudent, registerTeacher };
+export { registerStudent, registerTeacher, loginUser };

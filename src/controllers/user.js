@@ -77,3 +77,43 @@ export const registerTeacher = async (req, res, next) => {
     return next({ status: 500, error });
   }
 };
+
+export const loginUser = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return next({
+        status: 400,
+        error: "Invalid email or Password",
+      });
+    }
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!validPassword) {
+      return next({
+        status: 400,
+        error: "Invalid email or Password",
+      });
+    }
+    const token = user.generateAuthKey();
+    const data = {
+      token,
+      user: _.pick(user, [
+        "_id",
+        "email",
+        "name",
+        "isAdmin",
+        "isTeacher",
+      ]),
+    };
+    const message = "login was successful";
+    return successResponse(res, 201, message, data);
+  } catch (error) {
+    return next({
+      status: 500,
+      error,
+    });
+  }
+};
