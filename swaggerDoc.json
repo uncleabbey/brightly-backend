@@ -1,0 +1,30 @@
+{
+    "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Brightly Backend API",
+    "description": "An education solution to help kids between 6 - 10 attends class during lockdown",
+    "license": {
+      "name": "MIT",
+      "url": "https://spdx.org/licenses/MIT.html",
+      "contact": {
+        "name": "Group 7",
+        "url": "http://uncleabbey.github.io/",
+        "email": "gabkay007@gmail.com"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    } 
+  },
+  "host": ["localhost:3000"],
+  "basePath": "/api/v1",
+  "schemes": [
+        "https",
+        "http"
+    ]
+}
