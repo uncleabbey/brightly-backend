@@ -1,10 +1,11 @@
-// import mongoose from "mongoose";
+import mongoose from "mongoose";
 // import { sign } from "jsonwebtoken";
 import { app, chai, expect, sinon } from "./helper";
 import { Student, Teacher } from "../src/models";
 
 const studentSingupUrl = "/api/v1/auth/signup/student";
 const teacherSingupUrl = "/api/v1/auth/signup/teacher";
+const loginUrl = "/api/v1/auth/login";
 
 before(async () => {
   const data = {
@@ -228,6 +229,113 @@ describe("POST /auth/signup/teacher", () => {
     chai
       .request(app)
       .post(teacherSingupUrl)
+      .set("Accept", "application/json")
+      .send(data)
+      .end((err, res) => {
+        expect(res.status).to.equal(500);
+        const { status } = res.body;
+        expect(status).to.equal("error");
+        done(err);
+        stub.restore();
+      });
+  });
+});
+
+describe("Login User Routes", () => {
+  it("Login user with valid inputs", (done) => {
+    const userData = {
+      email: "davido@example.com",
+      password: "buhariole",
+    };
+    chai
+      .request(app)
+      .post(loginUrl)
+      .set("Accept", "application/json")
+      .send(userData)
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        const { status, message, data } = res.body;
+        const { token, user } = data;
+        expect(status).to.equal("success");
+        expect(message).to.equal("login was successful");
+        expect(token).to.be.a("string");
+        expect(user).to.be.an("object");
+        expect(user).to.have.property("_id");
+        expect(user).to.have.property("email");
+        expect(user).to.have.property("firstName");
+        expect(user).to.have.property("lastName");
+        expect(user).to.have.property("isAdmin");
+        expect(user).to.have.property("isTeacher");
+        done();
+      });
+  });
+  it("should return error for invalid password", (done) => {
+    const data = {
+      email: "davido@example.com",
+      password: "buhariol",
+    };
+    chai
+      .request(app)
+      .post(loginUrl)
+      .set("Accept", "application/json")
+      .send(data)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        const { status, error } = res.body;
+        expect(status).to.equal("error");
+        expect(error).to.equal("Invalid email or Password");
+        done();
+      });
+  });
+  it("should return error for invalid email", (done) => {
+    const data = {
+      email: "david@example.com",
+      password: "buhariole",
+    };
+    chai
+      .request(app)
+      .post(loginUrl)
+      .set("Accept", "application/json")
+      .send(data)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        const { status, error } = res.body;
+        expect(status).to.equal("error");
+        expect(error).to.equal("Invalid email or Password");
+        done();
+      });
+  });
+  it("should error for invalid inputs", (done) => {
+    const data = {
+      email: "",
+      password: "buhariol",
+    };
+    chai
+      .request(app)
+      .post(loginUrl)
+      .set("Accept", "application/json")
+      .send(data)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        const { status, error } = res.body;
+        expect(status).to.equal("error");
+        expect(error).to.be.a("string");
+        done();
+      });
+  });
+  it("Should return internal server error when there is a problem logging in user", (done) => {
+    const stub = sinon
+      .stub(mongoose.Model, "findOne")
+      .callsFake(() =>
+        Promise.reject(new Error("Internal server error"))
+      );
+    const data = {
+      email: "davidor@example.com",
+      password: "buhariole",
+    };
+    chai
+      .request(app)
+      .post(loginUrl)
       .set("Accept", "application/json")
       .send(data)
       .end((err, res) => {
