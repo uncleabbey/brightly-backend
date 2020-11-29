@@ -10,11 +10,21 @@ export const validateStudentSchema = (user) => {
   });
   return schema.validate(user);
 };
-
-export const validateLoginSchema = (user) => {
+export const validatTeacherSchema = (user) => {
   const schema = Joi.object({
+    firstName: Joi.string().min(3).max(50).required(),
+    lastName: Joi.string().min(3).max(50).required(),
     email: Joi.string().min(3).max(255).required().email(),
     password: Joi.string().min(3).max(255).required(),
+    subject: Joi.string().required(),
   });
   return schema.validate(user);
 };
+
+// export const validateLoginSchema = (user) => {
+//   const schema = Joi.object({
+//     email: Joi.string().min(3).max(255).required().email(),
+//     password: Joi.string().min(3).max(255).required(),
+//   });
+//   return schema.validate(user);
+// };
