@@ -21,10 +21,227 @@
       "in": "header"
     } 
   },
-  "host": ["localhost:3000"],
+  "host": ["brightly-api.herokuapp.com"],
   "basePath": "/api/v1",
   "schemes": [
-        "https",
-        "http"
-    ]
+        "https"
+    ],
+    "tags": [
+    {
+      "name": "User",
+      "description": "API for aunthentication and access"
+    }
+  ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+      "paths": {
+    "/auth/signup/student": {
+      "post": {
+        "tags": ["User"],
+        "summary": "it registers student",
+        "description": "Registers the students and returns the token",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/Student"
+            }
+        }
+      ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          },
+          "400": {
+          "description": "bad request"
+          }
+        }
+      }
+    },
+    "/auth/signup/teacher": {
+      "post": {
+        "tags": ["User"],
+        "summary": "it registers teacher",
+        "description": "Registers the teacher and returns the token",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/Teacher"
+            }
+        }
+      ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          },
+          "400": {
+          "description": "bad request"
+          }
+        }
+      }
+    },
+      "/auth/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "login users",
+        "description": "login the user and returns the token",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+        }
+      ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          },
+          "400": {
+          "description": "error"
+          }
+        }
+      }
+    },
+  "/auth/me": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get users",
+        "description": "Get a user details based on token supplied",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+          "description": "error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+      "Student": {
+      "required": [
+        "firstName", "lastName", "email", "grade", "password"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "The auto-generated id of the user."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The first name of your user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The first name of your user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email of your user."
+        },
+        "grade": {
+          "type": "string",
+          "description": "The grade of your user."
+        },
+        "password": {
+          "type": "string",
+          "description": "The password of your user."
+        }
+      },
+      "example": {
+        "firstName": "Jane",
+        "lastName": "Doe",
+        "email": "janeDoe@gmail.com",
+        "grade": "3",
+        "password": "johnnixace"
+      }
+    },
+      "Teacher": {
+      "required": [
+        "firstName", "lastName", "email", "subject", "password"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "The auto-generated id of the user."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The first name of your user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The last name of your user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email of your user."
+        },
+        "subject": {
+          "type": "string",
+          "description": "The email of your user."
+        },
+        "password": {
+          "type": "string",
+          "description": "The password of your user."
+        }
+      },
+      "example": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "johnDoe@gmail.com",
+        "subject": "English Language",
+        "password": "johnnixace"
+      }
+    },
+      "User": {
+      "required": [
+        "email", "password"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "The auto-generated id of the user."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of your user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email of your user."
+        },
+        "password": {
+          "type": "string",
+          "description": "The password of your user."
+        }
+      },
+      "example": {
+        "email": "johnDoe@gmail.com",
+        "password": "johnnixace"
+      }
+    }
+  }
 }
