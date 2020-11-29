@@ -118,3 +118,19 @@ export const loginUser = async (req, res, next) => {
     });
   }
 };
+export const getUser = (req, res) => {
+  // eslint-disable-next-line prettier/prettier
+  const { user } = req;
+  const message = "User retrieved successfully";
+  const data = {
+    user: _.pick(user, [
+      "_id",
+      "email",
+      "firstName",
+      "lastName",
+      "isAdmin",
+      "isTeacher",
+    ]),
+  };
+  return successResponse(res, 200, message, data);
+};

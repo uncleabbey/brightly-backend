@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
-// import { sign } from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 import { app, chai, expect, sinon } from "./helper";
 import { Student, Teacher } from "../src/models";
 
 const studentSingupUrl = "/api/v1/auth/signup/student";
 const teacherSingupUrl = "/api/v1/auth/signup/teacher";
 const loginUrl = "/api/v1/auth/login";
+const getUserUrl = "/api/v1/auth/me";
+let validToken;
+let inToken;
 
 before(async () => {
   const data = {
@@ -22,18 +25,21 @@ before(async () => {
     lastName: "Boy",
     subject: "English Language",
   };
-  await chai.request(app).post(studentSingupUrl).send(data);
+  const res = await chai
+    .request(app)
+    .post(studentSingupUrl)
+    .send(data);
   await chai.request(app).post(teacherSingupUrl).send(data2);
-  // validToken = res.body.data.token;
-  // inToken = await sign(
-  //   {
-  //     // eslint-disable-next-line no-underscore-dangle
-  //     _id: "5fa996a0ec9008047ccaa1bd",
-  //     isAdmin: false,
-  //   },
-  //   process.env.SEC_KEY,
-  //   { expiresIn: "24h" }
-  // );
+  validToken = res.body.data.token;
+  inToken = await sign(
+    {
+      // eslint-disable-next-line no-underscore-dangle
+      _id: "5fa996a0ec9008047ccaa1bd",
+      isAdmin: false,
+    },
+    process.env.SEC_KEY,
+    { expiresIn: "24h" }
+  );
 });
 
 describe("POST /auth/signup/student", () => {
@@ -344,6 +350,68 @@ describe("Login User Routes", () => {
         expect(status).to.equal("error");
         done(err);
         stub.restore();
+      });
+  });
+});
+describe("get Users", () => {
+  it("should get user details from valid token", (done) => {
+    chai
+      .request(app)
+      .get(getUserUrl)
+      .set("authorization", `Bearer ${validToken}`)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        const { status, data } = res.body;
+        const { user } = data;
+        expect(status).to.equal("success");
+        expect(user).to.be.an("object");
+        expect(user).to.have.property("_id");
+        expect(user).to.have.property("email");
+        expect(user).to.have.property("lastName");
+        expect(user).to.have.property("firstName");
+        expect(user).to.have.property("isAdmin");
+        expect(user).to.have.property("isTeacher");
+        done();
+      });
+  });
+  it("should get error from no token", (done) => {
+    chai
+      .request(app)
+      .get(getUserUrl)
+      .end((err, res) => {
+        expect(res).to.have.status(401);
+        const { status, error } = res.body;
+        expect(status).to.equal("error");
+        expect(error).to.be.a("string");
+        done();
+      });
+  });
+  it("should get error from invalid token", (done) => {
+    chai
+      .request(app)
+      .get(getUserUrl)
+      .set("authorization", `Bearer ${inToken}`)
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        const { status, error } = res.body;
+        expect(status).to.equal("error");
+        expect(error).to.be.a("string");
+        expect(error).to.be.equal("Sorry User not Found");
+        done();
+      });
+  });
+  it("should get error from invalid token", (done) => {
+    chai
+      .request(app)
+      .get(getUserUrl)
+      .set("authorization", `Bearer ${inToken}gsg`)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        const { status, error } = res.body;
+        expect(status).to.equal("error");
+        expect(error).to.be.a("string");
+        expect(error).to.be.equal("Invalid token....");
+        done();
       });
   });
 });
