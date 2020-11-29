@@ -1,4 +1,4 @@
-# brightly-backend
+# brightly-backend [![Build Status](https://travis-ci.com/uncleabbey/brightly-backend.svg?branch=develop)](https://travis-ci.com/uncleabbey/brightly-backend)
 
 
 ## Technology Used
