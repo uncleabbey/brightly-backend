@@ -2,6 +2,7 @@ import { Router } from "express";
 import { join } from "path";
 import swaggerUi from "swagger-ui-express";
 import swaggerDoc from "../../swaggerDoc.json";
+import user from "./user";
 
 // initialize router
 const router = new Router();
@@ -16,5 +17,6 @@ router.route("/").get((req, res) => {
 router.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 // other routes goes here
+router.use("/api/v1/auth", user);
 
 export default router;

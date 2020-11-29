@@ -1,7 +1,11 @@
 /* eslint-disable no-console */
 import mongoose from "mongoose";
+import { Student, User } from "./users";
 
-mongoose.set("debug", true);
+/* istanbul ignore if */
+if (process.env.NODE_ENV === "development") {
+  mongoose.set("debug", true);
+}
 mongoose.Promise = global.Promise;
 const connectDatabase = (dbUrl) => {
   mongoose
@@ -20,4 +24,4 @@ const connectDatabase = (dbUrl) => {
     );
 };
 
-export default connectDatabase;
+export { Student, User, connectDatabase };

@@ -4,7 +4,7 @@ import { config } from "dotenv";
 import morgan from "morgan";
 import routes from "./routes";
 import errorResponse from "./helpers/errorResponse";
-import connectDatabase from "./models/index";
+import { connectDatabase } from "./models/index";
 import getDb from "./helpers/getDb";
 
 config();
