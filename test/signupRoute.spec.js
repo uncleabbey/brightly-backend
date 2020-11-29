@@ -262,7 +262,8 @@ describe("Login User Routes", () => {
         expect(user).to.be.an("object");
         expect(user).to.have.property("_id");
         expect(user).to.have.property("email");
-        expect(user).to.have.property("name");
+        expect(user).to.have.property("firstName");
+        expect(user).to.have.property("lastName");
         expect(user).to.have.property("isAdmin");
         expect(user).to.have.property("isTeacher");
         done();

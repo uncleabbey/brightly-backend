@@ -103,7 +103,8 @@ export const loginUser = async (req, res, next) => {
       user: _.pick(user, [
         "_id",
         "email",
-        "name",
+        "firstName",
+        "lastName",
         "isAdmin",
         "isTeacher",
       ]),
