@@ -72,6 +72,18 @@ const Student = User.discriminator(
     options
   )
 );
+const Teacher = User.discriminator(
+  "Teacher",
+  new Schema(
+    {
+      subject: {
+        type: String,
+        required: true,
+      },
+    },
+    options
+  )
+);
 
 // export const Student = model("Student", studentSchema);
-export { User, Student };
+export { User, Student, Teacher };

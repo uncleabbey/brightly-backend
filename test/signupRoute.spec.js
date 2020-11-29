@@ -1,9 +1,10 @@
 // import mongoose from "mongoose";
 // import { sign } from "jsonwebtoken";
 import { app, chai, expect, sinon } from "./helper";
-import { Student } from "../src/models";
+import { Student, Teacher } from "../src/models";
 
 const studentSingupUrl = "/api/v1/auth/signup/student";
+const teacherSingupUrl = "/api/v1/auth/signup/teacher";
 
 before(async () => {
   const data = {
@@ -13,7 +14,15 @@ before(async () => {
     lastName: "Davido",
     grade: "2",
   };
+  const data2 = {
+    email: "burna@example.com",
+    password: "buhariole",
+    firstName: "Burna",
+    lastName: "Boy",
+    subject: "English Language",
+  };
   await chai.request(app).post(studentSingupUrl).send(data);
+  await chai.request(app).post(teacherSingupUrl).send(data2);
   // validToken = res.body.data.token;
   // inToken = await sign(
   //   {
@@ -117,6 +126,108 @@ describe("POST /auth/signup/student", () => {
     chai
       .request(app)
       .post(studentSingupUrl)
+      .set("Accept", "application/json")
+      .send(data)
+      .end((err, res) => {
+        expect(res.status).to.equal(500);
+        const { status } = res.body;
+        expect(status).to.equal("error");
+        done(err);
+        stub.restore();
+      });
+  });
+});
+describe("POST /auth/signup/teacher", () => {
+  it("Should register teacher with valid input", (done) => {
+    const userData = {
+      firstName: "adebanke",
+      lastName: "adebank",
+      password: "12345678",
+      email: "teacher1@email.com",
+      subject: "Computer education",
+    };
+    chai
+      .request(app)
+      .post(teacherSingupUrl)
+      .set("Accept", "application/json")
+      .send(userData)
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        const { status, message, data } = res.body;
+        const { token, user } = data;
+        expect(status).to.equal("success");
+        expect(message).to.equal("Teacher created successfully");
+        expect(token).to.be.a("string");
+        expect(user).to.be.an("object");
+        expect(user).to.have.property("_id");
+        expect(user).to.have.property("email");
+        expect(user).to.have.property("firstName");
+        expect(user).to.have.property("lastName");
+        expect(user).to.have.property("isAdmin");
+        expect(user).to.have.property("isTeacher");
+        expect(user).to.have.property("subject");
+        done(err);
+      });
+  });
+  it("Should return error for invalid teacher input", (done) => {
+    const data = {
+      firstName: "",
+      lastName: "adebanke",
+      password: "12345678",
+      email: "teacher3@email.com",
+      subject: "Computer education",
+    };
+    chai
+      .request(app)
+      .post(teacherSingupUrl)
+      .set("Accept", "application/json")
+      .send(data)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        const { status, error } = res.body;
+        expect(status).to.equal("error");
+        expect(error).to.be.a("string");
+        done(err);
+      });
+  });
+
+  it("Should return error if teacher has registered before", (done) => {
+    const data = {
+      email: "burna@example.com",
+      password: "buhariole",
+      firstName: "Burna",
+      lastName: "Boy",
+      subject: "English Language",
+    };
+    chai
+      .request(app)
+      .post(teacherSingupUrl)
+      .set("Accept", "application/json")
+      .send(data)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        const { status, error } = res.body;
+        expect(status).to.equal("error");
+        expect(error).to.equal("Sorry User already exist");
+        done(err);
+      });
+  });
+  it("Should return internal server error when there is a problem creating teacher", (done) => {
+    const stub = sinon
+      .stub(Teacher.prototype, "save")
+      .callsFake(() =>
+        Promise.reject(new Error("Internal server error"))
+      );
+    const data = {
+      email: "davidopopu@example.com",
+      password: "buhariole",
+      firstName: "Davido",
+      lastName: "Davido",
+      subject: "Computer education",
+    };
+    chai
+      .request(app)
+      .post(teacherSingupUrl)
       .set("Accept", "application/json")
       .send(data)
       .end((err, res) => {

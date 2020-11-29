@@ -1,6 +1,7 @@
 import {
-  validateLoginSchema,
+  // validateLoginSchema,
   validateStudentSchema,
+  validatTeacherSchema,
 } from "../helpers/validators";
 
 export const validatStudentBody = (req, res, next) => {
@@ -13,8 +14,8 @@ export const validatStudentBody = (req, res, next) => {
   }
   return next();
 };
-export const validateLoginBody = (req, res, next) => {
-  const error = validateLoginSchema(req.body);
+export const validatTeacherBody = (req, res, next) => {
+  const error = validatTeacherSchema(req.body);
   if (error.error) {
     return next({
       status: 400,
@@ -23,3 +24,13 @@ export const validateLoginBody = (req, res, next) => {
   }
   return next();
 };
+// export const validateLoginBody = (req, res, next) => {
+//   const error = validateLoginSchema(req.body);
+//   if (error.error) {
+//     return next({
+//       status: 400,
+//       error: error.error.details[0].message,
+//     });
+//   }
+//   return next();
+// };
