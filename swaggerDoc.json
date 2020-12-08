@@ -137,7 +137,311 @@
           }
         ]
       }
+    },
+    "/class": {
+      "get": {
+        "tags": ["Class"],
+        "summary": "It get the list of classes",
+        "description": "Get List of classes based on token",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Class"],
+        "summary": "It adds class",
+        "description": "Protected route. Add class to the database",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/Class"
+            }
+        }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          },
+          "400": {
+          "description": "error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+  "/class/{id}": {
+    "get": {
+      "tags": ["Class"],
+      "summary": "It retrieves class by id",
+      "description": "Protected route. retrieves the class by its id from the database",
+      "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the class.",
+            "type": "string"
+          }
+        ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "successful operation"
+        },
+        "400": {
+          "description": "error"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    },
+    "patch": {
+      "tags": ["Class"],
+      "summary": "It updates a class by id",
+      "description": "Protected route. edit the class by its id from the database",
+      "parameters": [
+              {
+            "name": "data",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/Class"
+            }
+        },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the class.",
+            "type": "string"
+          }
+        ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "successful operation"
+        },
+        "400": {
+          "description": "error"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    },
+    "delete": {
+      "tags": ["Class"],
+      "summary": "It deletes a class by id",
+      "description": "Protected route. delete the class by its id from the database",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the class.",
+            "type": "string"
+          }
+        ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "successful operation"
+        },
+        "400": {
+          "description": "error"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
     }
+  },
+  "/class/{classId}/lessons": {
+    "post": {
+      "tags": ["Lesson"],
+      "summary":"It adds lessons to the class",
+      "description": "Protected route. Add lesson to the class",
+      "parameters": [
+          {
+            "name": "classId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the class.",
+            "type": "string"
+          },
+        {
+            "name": "data",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/Lesson"
+            }
+        }
+        ],
+      "produces": ["application/json"],
+      "responses": {
+        "201": {
+          "description": "successful operation"
+        },
+        "400": {
+          "description": "error"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    },
+    "get": {
+      "tags": ["Lesson"],
+      "summary": "It retrieves the list of lessons for a class",
+      "description": "Protected route. gets a list  of lessons of a class",
+        "parameters": [
+          {
+            "name": "classId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the class.",
+            "type": "string"
+          }
+        ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "successful operation"
+        },
+        "400": {
+          "description": "error"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+  },
+  "/lessons/{lessonId}": {
+    "get": {
+      "tags": ["Lesson"],
+      "summary": "It retrieves lesson",
+      "description": "Protected route. retrieves the lesson by its id from the database",       
+      "parameters": [
+          {
+            "name": "lessonId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the class.",
+            "type": "string"
+          }
+        ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "successful operation"
+        },
+        "400": {
+          "description": "error"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    },
+    "patch": {
+      "tags": ["Lesson"],
+      "summary": "It updates lesson",
+      "description": "Protected route. updates the lesson by its id from the database",       
+      "parameters": [
+          {
+            "name": "lessonId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the class.",
+            "type": "string"
+          },
+          {
+            "name": "data",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/Lesson"
+            }
+        }
+        ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "successful operation"
+        },
+        "400": {
+          "description": "error"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    },
+    "delete": {
+      "tags": ["Lesson"],
+      "summary": "It deletes lesson",
+      "description": "Protected route. delete the lesson by its id from the database",       
+      "parameters": [
+          {
+            "name": "lessonId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the class.",
+            "type": "string"
+          }
+        ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "successful operation"
+        },
+        "400": {
+          "description": "error"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+  }
   },
   "definitions": {
       "Student": {
@@ -241,6 +545,62 @@
       "example": {
         "email": "johnDoe@gmail.com",
         "password": "johnnixace"
+      }
+    },
+    "Class": {
+      "required": [
+        "schedules", "grade", "subject" 
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "The auto-generated id of the class"
+        },
+        "schedules": {
+          "type": "array",
+          "description": "list of schedules for class"
+        },
+        "subject": {
+          "type": "string",
+          "description": "The subject of the class"
+        },
+        "grade": {
+          "type": "string",
+          "description": "the class grade"
+        }
+      },
+      "example": {
+        "subject": "English Language",
+        "schedules": ["Thursday", "Friday"],
+        "grade": "3"
+      }
+    },
+    "Lesson": {
+      "required": [
+        "title", "body", "week" 
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "The auto-generated id of the lesson"
+        },
+        "week": {
+          "type": "integer",
+          "description": "The week of the lesson"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the lesson"
+        },
+        "body": {
+          "type": "string",
+          "description": "The body of the lesson"
+        }
+      },
+      "example": {
+        "week": 3,
+        "title":"Lorem Dolor",
+        "body": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostru exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
       }
     }
   }
