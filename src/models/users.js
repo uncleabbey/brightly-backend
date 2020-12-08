@@ -24,6 +24,7 @@ const userSchema = new Schema(
       minlength: 3,
       maxlength: 50,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -68,6 +69,12 @@ const Student = User.discriminator(
         enum: ["1", "2", "3", "4", "5"],
         default: "1",
       },
+      classes: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Class",
+        },
+      ],
     },
     options
   )
