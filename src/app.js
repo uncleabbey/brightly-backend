@@ -6,7 +6,6 @@ import routes from "./routes";
 import errorResponse from "./helpers/errorResponse";
 import { connectDatabase } from "./models/index";
 import getDb from "./helpers/getDb";
-import { cloudinaryConfig } from "./middlewares/cloudinary";
 
 config();
 
@@ -22,12 +21,12 @@ connectDatabase(dbUrl);
 // middlewares
 app.use(cors());
 app.use(json());
-app.use(urlencoded({ extended: false }));
+app.use(urlencoded({ extended: true }));
 /* istanbul ignore if */
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("tiny"));
 }
-app.use("*", cloudinaryConfig);
+
 // routes
 app.use(routes);
 

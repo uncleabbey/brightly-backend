@@ -28,35 +28,3 @@ export const validateLoginSchema = (user) => {
   });
   return schema.validate(user);
 };
-
-export const validateLessonSchema = (lesson) => {
-  const schema = Joi.object({
-    title: Joi.string().required(),
-    body: Joi.string().required(),
-    week: Joi.number().required(),
-  });
-  return schema.validate(lesson);
-};
-export const validateClassSchema = (classes) => {
-  const schema = Joi.object({
-    schedule: Joi.array().required(),
-    grade: Joi.string().required(),
-    subject: Joi.string().required(),
-  });
-  return schema.validate(classes);
-};
-export const validateTimeTableSchema = (classes) => {
-  const schema = Joi.object({
-    day: Joi.string.valid(
-      "Monaday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday"
-    ),
-    grade: Joi.string().valid("1", "2", "3", "4", "5"),
-    startTime: Joi.string().required(),
-    endTime: Joi.string().required(),
-  });
-  return schema.validate(classes);
-};

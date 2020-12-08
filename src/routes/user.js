@@ -4,7 +4,6 @@ import {
   registerTeacher,
   loginUser,
   getUser,
-  // getAllClassByStudent,
 } from "../controllers";
 import {
   validatStudentBody,
@@ -24,7 +23,4 @@ router
 router.route("/login").post(validateLoginBody, loginUser);
 
 router.route("/me").get(verifyUser, getUser);
-// router
-//   .route("/students/:id/classes")
-//   .get(verifyUser, getAllClassByStudent);
 export default router;
