@@ -20,6 +20,7 @@ export const registerStudent = async (req, res, next) => {
     });
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
+
     await user.save();
     const token = user.generateAuthKey();
     const message = "student created successfully";
