@@ -1,6 +1,13 @@
 /* eslint-disable no-console */
 import mongoose from "mongoose";
 import { Student, User, Teacher } from "./users";
+import {
+  Class,
+  Lesson,
+  Resources,
+  TimeTable,
+  Comment,
+} from "./class";
 
 /* istanbul ignore if */
 if (process.env.NODE_ENV === "development") {
@@ -24,4 +31,14 @@ const connectDatabase = (dbUrl) => {
     );
 };
 
-export { Student, User, connectDatabase, Teacher };
+export {
+  Student,
+  User,
+  connectDatabase,
+  Teacher,
+  Class,
+  Lesson,
+  Resources,
+  TimeTable,
+  Comment,
+};

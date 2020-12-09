@@ -6,6 +6,7 @@ import routes from "./routes";
 import errorResponse from "./helpers/errorResponse";
 import { connectDatabase } from "./models/index";
 import getDb from "./helpers/getDb";
+// import { cloudinaryConfig } from "./middlewares/cloudinary";
 
 config();
 
@@ -27,6 +28,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("tiny"));
 }
 
+// app.use("*", cloudinaryConfig);
 // routes
 app.use(routes);
 
