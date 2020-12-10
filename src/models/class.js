@@ -43,7 +43,6 @@ const lessonSchema = new Schema(
     week: {
       type: Number,
       required: true,
-      unique: true,
     },
     title: {
       type: String,
