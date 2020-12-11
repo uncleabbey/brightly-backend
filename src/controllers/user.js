@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import _ from "lodash";
 import successResponse from "../helpers/successResponse";
 
-import { User, Student, Teacher } from "../models";
+import { User, Student, Teacher, Class } from "../models";
 
 export const registerStudent = async (req, res, next) => {
   const { email, password, firstName, lastName, grade } = req.body;
@@ -21,6 +21,15 @@ export const registerStudent = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
     await user.save();
+    const classes = await Class.find({ grade });
+
+    await Promise.all(
+      // eslint-disable-next-line array-callback-return
+      classes.map((cla) => {
+        cla.students.push(user._id);
+        cla.save();
+      })
+    );
     const token = user.generateAuthKey();
     const message = "student created successfully";
     const data = {

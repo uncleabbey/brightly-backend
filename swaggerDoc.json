@@ -33,7 +33,8 @@
     }
   ],
     "consumes": [
-        "application/json"
+        "application/json",
+        "multipart/form-data"
     ],
     "produces": [
         "application/json"
