@@ -74,8 +74,16 @@ export const getClass = async (req, res, next) => {
   try {
     const { id } = req.params;
     const getClassDetails = await Class.findById(id).populate({
-      path: "lessons",
+      path: "lessons students",
       populate: { path: "resources" },
+      select: [
+        "-password",
+        "-kind",
+        "-isAdmin",
+        "-isTeacher",
+        "-__v",
+        "-grade",
+      ],
     });
     if (getClassDetails) {
       const message = "Classes retrieved successfully";

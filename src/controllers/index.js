@@ -3,6 +3,8 @@ import {
   registerTeacher,
   loginUser,
   getUser,
+  changePassword,
+  changeAvatar,
 } from "./user";
 import {
   RegisterStudentForClass,
@@ -65,4 +67,6 @@ export {
   addResources,
   addComment,
   getResourcesById,
+  changePassword,
+  changeAvatar,
 };

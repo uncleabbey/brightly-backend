@@ -59,3 +59,10 @@ export const validateTimeTableSchema = (classes) => {
   });
   return schema.validate(classes);
 };
+
+export const validatePasswordSchema = (user) => {
+  const schema = Joi.object({
+    password: Joi.string().min(3).max(255).required(),
+  });
+  return schema.validate(user);
+};

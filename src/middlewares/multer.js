@@ -19,7 +19,7 @@ const getFileType = (type) => {
   }
 };
 const storage = multer.memoryStorage();
-const multerUploads = multer({ storage }).single("files");
+const multerUploads = multer({ storage }).single("file");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

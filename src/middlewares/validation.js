@@ -5,6 +5,7 @@ import {
   validateLessonSchema,
   validateClassSchema,
   validateTimeTableSchema,
+  validatePasswordSchema,
 } from "../helpers/validators";
 
 export const validatStudentBody = (req, res, next) => {
@@ -29,6 +30,16 @@ export const validatTeacherBody = (req, res, next) => {
 };
 export const validateLoginBody = (req, res, next) => {
   const error = validateLoginSchema(req.body);
+  if (error.error) {
+    return next({
+      status: 400,
+      error: error.error.details[0].message,
+    });
+  }
+  return next();
+};
+export const validatePasswordBody = (req, res, next) => {
+  const error = validatePasswordSchema(req.body);
   if (error.error) {
     return next({
       status: 400,

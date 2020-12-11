@@ -1,8 +1,9 @@
 import bcrypt from "bcryptjs";
 import _ from "lodash";
 import successResponse from "../helpers/successResponse";
+import { uploader } from "../middlewares/multer";
 
-import { User, Student, Teacher } from "../models";
+import { User, Student, Teacher, Class } from "../models";
 
 export const registerStudent = async (req, res, next) => {
   const { email, password, firstName, lastName, grade } = req.body;
@@ -21,6 +22,15 @@ export const registerStudent = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
     await user.save();
+    const classes = await Class.find({ grade });
+
+    await Promise.all(
+      // eslint-disable-next-line array-callback-return
+      classes.map((cla) => {
+        cla.students.push(user._id);
+        cla.save();
+      })
+    );
     const token = user.generateAuthKey();
     const message = "student created successfully";
     const data = {
@@ -33,6 +43,7 @@ export const registerStudent = async (req, res, next) => {
         "grade",
         "isAdmin",
         "isTeacher",
+        "avatar",
       ]),
     };
     return successResponse(res, 201, message, data);
@@ -70,6 +81,7 @@ export const registerTeacher = async (req, res, next) => {
         "subject",
         "isAdmin",
         "isTeacher",
+        "avatar",
       ]),
     };
     return successResponse(res, 201, message, data);
@@ -107,6 +119,7 @@ export const loginUser = async (req, res, next) => {
         "lastName",
         "isAdmin",
         "isTeacher",
+        "avatar",
       ]),
     };
     const message = "login was successful";
@@ -130,7 +143,67 @@ export const getUser = (req, res) => {
       "lastName",
       "isAdmin",
       "isTeacher",
+      "avatar",
     ]),
   };
   return successResponse(res, 200, message, data);
+};
+export const changePassword = async (req, res, next) => {
+  try {
+    const { password: newPassword } = req.body;
+    // const { _id } = req.user;
+    // const user = await User.findById(_id);
+    const { user } = req;
+    const check = await bcrypt.compare(newPassword, user.password);
+    if (check) {
+      return next({
+        status: 400,
+        error: "Your old password is same as your new password",
+      });
+    }
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+    const message = "password was changed successfully";
+    return successResponse(res, 200, message);
+  } catch (error) {
+    return next({
+      status: 500,
+      error,
+    });
+  }
+};
+
+export const changeAvatar = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    const user = await User.findById(_id);
+    if (req.file) {
+      const file = await uploader.upload(req.file);
+      user.avatar = file.uploadedFile.url;
+      await user.save();
+      const message = "avatar uploaded successfully";
+      const data = {
+        user: _.pick(user, [
+          "_id",
+          "email",
+          "firstName",
+          "lastName",
+          "isAdmin",
+          "isTeacher",
+          "avatar",
+        ]),
+      };
+      return successResponse(res, 200, message, data);
+    }
+    return next({
+      status: 400,
+      error: "No files in the request",
+    });
+  } catch (error) {
+    return next({
+      status: 500,
+      error,
+    });
+  }
 };
