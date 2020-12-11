@@ -22,7 +22,7 @@ export default async (req, res, next) => {
       status: 404,
       error: "Sorry User not Found",
     });
-  } catch (ex) {
+  } catch (error) {
     return next({
       status: 400,
       error: "Invalid token....",

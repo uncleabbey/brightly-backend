@@ -139,6 +139,76 @@
         ]
       }
     },
+  "/auth/change/password": {
+    "patch": {
+      "tags": ["User"],
+      "summary": "Changes the password of the user",
+      "description": "Changes the password of the user. Takes a s",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/Password"
+            }
+        }
+      ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+          "description": "bad request || same password as old"
+          },
+          "500": {
+          "description": "internal server error"
+          }
+        },        
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+    }
+  },
+  "/auth/change/avatar": {
+    "patch": {
+      "tags": ["User"],
+      "summary": "Changes the avatar of the user",
+      "description": "Changes the avatar of the user",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+        {
+            "name": "file",
+            "in": "formData",
+            "description": "file to upload",
+            "required": false,
+            "type": "file"
+          }
+      ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+          "description": "bad request || same password as old"
+          },
+          "500": {
+          "description": "internal server error"
+          }
+        },        
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+    }
+  },
     "/class": {
       "get": {
         "tags": ["Class"],
@@ -602,6 +672,15 @@
         "week": 3,
         "title":"Lorem Dolor",
         "body": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostru exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+      }
+    },
+    "Password": {
+      "required": ["password"],
+      "properties": {
+        "password": {
+          "type": "string",
+          "description": "The new password"
+        }
       }
     }
   }

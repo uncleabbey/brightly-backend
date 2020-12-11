@@ -41,6 +41,8 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String,
+      default:
+        "https://res.cloudinary.com/kayode/image/upload/v1607679190/TransAll/avatar_nw45k6.svg",
     },
   },
   options

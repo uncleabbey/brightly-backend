@@ -15,6 +15,10 @@ router.route("/").get((req, res) => {
   res.set("Content-Type", "text/html");
   res.sendFile(join(__dirname, "../../public/index.html"));
 });
+router.route("/api/v1").get((req, res) => {
+  res.set("Content-Type", "text/html");
+  res.sendFile(join(__dirname, "../../public/index.html"));
+});
 
 // swagger docs
 router.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
