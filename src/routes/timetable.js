@@ -13,7 +13,7 @@ import { validateTimeTableBody } from "../middlewares/validation";
 
 const router = new express.Router();
 
-router.get("/timetable/grade/:grade", getTimeTableByGrade);
+router.get("/timetable/grade", verifyUser, getTimeTableByGrade);
 router.post("/:classId/timetable/", verifyUser, isTeacher, addTimeTable)
 
 router
