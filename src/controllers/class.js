@@ -257,3 +257,31 @@ export const getAllClassByStudent = async (req, res, next) => {
     });
   }
 };
+
+export const getAllClassByGrade = async (req, res, next) => {
+  try {
+    const { grade } = req.user;
+    const classes = await Class.find({ grade }).populate({
+      path: "lessons students",
+      populate: { path: "resources" },
+      select: [
+        "-password",
+        "-kind",
+        "-isAdmin",
+        "-isTeacher",
+        "-__v",
+        "-grade",
+      ],
+    });
+    const message = "Classes retrieved successfully";
+    const data = {
+      classes,
+    };
+    return successResponse(res, 200, message, data);
+  } catch (error) {
+    return next({
+      status: 500,
+      error,
+    });
+  }
+};
