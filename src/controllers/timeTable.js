@@ -18,30 +18,6 @@ export const getAllTimeTable = async (req, res, next) => {
   }
 };
 
-export const addTimeTable = async (req, res, next) => {
-  try {
-    const { grade, day, endTime, startTime, classId } = req.body;
-    const timeTable = new TimeTable({
-      grade,
-      day,
-      endTime,
-      startTime,
-      class: classId,
-    });
-    // timeTable.(classId);
-    await timeTable.save();
-    const data = {
-      timeTable,
-    };
-    const message = "Timetable created successfully";
-    return successResponse(res, 201, message, data);
-  } catch (error) {
-    return next({
-      status: 500,
-      error,
-    });
-  }
-};
 
 export const editTimeTable = async (req, res, next) => {
   try {
@@ -114,7 +90,7 @@ export const getTableById = async (req, res, next) => {
 
 export const getTimeTableByGrade = async (req, res, next) => {
   try {
-    const { grade } = req.params;
+    const { grade } = req.user;
     const timetables = await TimeTable.find({ grade }).populate(
       "class"
     );
@@ -123,6 +99,35 @@ export const getTimeTableByGrade = async (req, res, next) => {
     const message = "Timetable by grades retrieved successfully";
     return successResponse(res, 200, message, data);
   } catch (error) {
+    return next({
+      status: 500,
+      error,
+    });
+  }
+};
+
+export const addTimeTable = async (req, res, next) => {
+  try {
+
+    const { grade, day, endTime, startTime } = req.body;
+    const { classId } = req.params;
+
+    const timeTable = new TimeTable({
+      grade,
+      day,
+      endTime,
+      startTime,
+      class: classId,
+    });
+    // timeTable.(classId);
+    await timeTable.save();
+    const data = {
+      timeTable,
+    };
+    const message = "Timetable created successfully";
+    return successResponse(res, 201, message, data);
+  } catch (error) {
+    console.log(error)
     return next({
       status: 500,
       error,
