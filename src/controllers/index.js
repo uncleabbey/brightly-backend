@@ -16,6 +16,7 @@ import {
   getAllClassByStudent,
   getClass,
   getStudentInAClass,
+  getAllClassByGrade,
 } from "./class";
 import {
   createLesson,
@@ -69,4 +70,5 @@ export {
   getResourcesById,
   changePassword,
   changeAvatar,
+  getAllClassByGrade,
 };

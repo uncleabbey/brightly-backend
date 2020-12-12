@@ -9,6 +9,7 @@ import {
   batchRegisterStudentForClass,
   getStudentInAClass,
   getAllClassByStudent,
+  getAllClassByGrade,
 } from "../controllers";
 import isTeacher from "../middlewares/isTeacher";
 import verifyUser from "../middlewares/verifyUser";
@@ -20,6 +21,8 @@ router
   .route("/")
   .get(verifyUser, getAllClass)
   .post(verifyUser, isTeacher, createClass);
+
+router.get("/grade", verifyUser, getAllClassByGrade);
 
 router.route("/student/all").get(verifyUser, getAllClassByStudent);
 router
