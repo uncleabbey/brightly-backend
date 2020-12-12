@@ -201,6 +201,7 @@ export const changeAvatar = async (req, res, next) => {
       error: "No files in the request",
     });
   } catch (error) {
+    // console.log(error)
     return next({
       status: 500,
       error,
