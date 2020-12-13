@@ -75,7 +75,14 @@ export const getClass = async (req, res, next) => {
     const { id } = req.params;
     const getClassDetails = await Class.findById(id).populate({
       path: "lessons students",
-      populate: { path: "resources" },
+      populate: { path: "resources comments", populate: "author", select: [
+        "-password",
+        "-kind",
+        "-isAdmin",
+        "-isTeacher",
+        "-__v",
+        "-grade",
+      ], },
       select: [
         "-password",
         "-kind",
@@ -263,7 +270,7 @@ export const getAllClassByGrade = async (req, res, next) => {
     const { grade } = req.user;
     const classes = await Class.find({ grade }).populate({
       path: "lessons students",
-      populate: { path: "resources" },
+      populate: { path: "resources comments" },
       select: [
         "-password",
         "-kind",

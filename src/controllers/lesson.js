@@ -38,6 +38,7 @@ export const createLesson = async (req, res, next) => {
     };
     return successResponse(res, 201, message, data);
   } catch (error) {
+    console.log(error)
     return next({
       status: 500,
       error,
