@@ -1,5 +1,6 @@
 import { Comment, Lesson } from "../models";
 import successResponse from "../helpers/successResponse";
+import _ from "lodash";
 
 const addComment = async (req, res, next) => {
   try {
@@ -15,7 +16,11 @@ const addComment = async (req, res, next) => {
       { useFindAndModify: false }
     );
     const message = "comment added successfully";
-    return successResponse(res, 201, message, { comment });
+    const data = {
+      comment: comment,
+      author: _.pick(req.user, ["firstName", "lastName", "email", "avatar"])
+    }
+    return successResponse(res, 201, message, data);
   } catch (error) {
     return next({
       status: 500,
