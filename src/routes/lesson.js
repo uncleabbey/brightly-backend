@@ -8,6 +8,7 @@ import {
   getAllLessons,
   addResources,
   addComment,
+  getResources
 } from "../controllers";
 
 // import addResources from "../controllers/resources";
@@ -40,5 +41,7 @@ router
   .get(verifyUser, getLesson)
   .patch(verifyUser, isTeacher, editLesson)
   .delete(verifyUser, isTeacher, deleteLesson);
+
+router.route("/resources").get(verifyUser, getResources)
 
 export default router;
