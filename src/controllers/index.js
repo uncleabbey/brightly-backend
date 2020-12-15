@@ -36,7 +36,7 @@ import {
   getTimeTableByGrade,
 } from "./timeTable";
 
-import { addResources, getResourcesById } from "./resources";
+import { addResources, getResourcesById, getResources } from "./resources";
 import addComment from "./comment";
 
 export {
@@ -71,4 +71,5 @@ export {
   changePassword,
   changeAvatar,
   getAllClassByGrade,
+  getResources
 };
