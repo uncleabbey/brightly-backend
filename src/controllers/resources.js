@@ -77,16 +77,22 @@ export const getResourcesById = async (req, res, next) => {
 
 export const getResources = async (req, res, next) => {
   try {
-    const resources = await Resources.find().populate("lesson");
-    if (resources) {
+    const { grade } = req.user;
+    console.log(grade)
+    // const resources = await Resources.find().populate("lesson");
+    const resources = await Resources.find().populate({
+      path: "lesson",
+      select: ["-body", "-resources", "-schedule", "-title", ],
+      populate: {
+        path: "class"
+      }
+    })
+      const resourcesByGrade = resources.filter(resource => resource.lesson.class.grade === grade)
       const message = "resources retrieved successfully";
-      return successResponse(res, 200, message, { resources });
-    }
-    return next({
-      status: 404,
-      error: "resource not found",
-    });
+      return successResponse(res, 200, message, { resourcess: resourcesByGrade });
+  
   } catch (error) {
+    console.log(error)
     return next({
       status: 500,
       error,
