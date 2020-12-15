@@ -118,6 +118,7 @@ export const loginUser = async (req, res, next) => {
         "firstName",
         "lastName",
         "isAdmin",
+        "grade",
         "isTeacher",
         "avatar",
       ]),

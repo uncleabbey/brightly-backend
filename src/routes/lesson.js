@@ -42,6 +42,6 @@ router
   .patch(verifyUser, isTeacher, editLesson)
   .delete(verifyUser, isTeacher, deleteLesson);
 
-router.route("/resources").get(verifyUser, getResources)
+router.route("/resources/grade").get(verifyUser, getResources)
 
 export default router;
