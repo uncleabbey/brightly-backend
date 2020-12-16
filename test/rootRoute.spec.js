@@ -10,6 +10,15 @@ describe("Index.js", () => {
         done();
       });
   });
+  it("should display welcome message", (done) => {
+    chai
+      .request(app)
+      .get("/api/v1")
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
   it("should display Error if route was not found", (done) => {
     chai
       .request(app)

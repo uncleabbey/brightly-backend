@@ -415,3 +415,58 @@ describe("get Users", () => {
       });
   });
 });
+
+const passwordUrl = "/api/v1/auth/change/password";
+describe("Change Password PATCH", () => {
+  it("changes the valid passowrd of valid user", (done) => {
+    const data = {
+      password: "babalawo",
+    };
+    chai
+      .request(app)
+      .patch(passwordUrl)
+      .set("authorization", `Bearer ${validToken}`)
+      .send(data)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        const { status, message } = res.body;
+        expect(status).to.equal("success");
+        expect(message).to.equal("password was changed successfully");
+        done(err);
+      });
+  });
+  it("return error for invalid password", (done) => {
+    const data = {
+      password: "",
+    };
+    chai
+      .request(app)
+      .patch(passwordUrl)
+      .set("authorization", `Bearer ${validToken}`)
+      .send(data)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        const { status, error } = res.body;
+        expect(status).to.equal("error");
+        expect(error).to.be.a("string");
+        done(err);
+      });
+  });
+  it("return error for same password", (done) => {
+    const data = {
+      password: "babalawo",
+    };
+    chai
+      .request(app)
+      .patch(passwordUrl)
+      .set("authorization", `Bearer ${validToken}`)
+      .send(data)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        const { status, error } = res.body;
+        expect(status).to.equal("error");
+        expect(error).to.be.a("string");
+        done(err);
+      });
+  });
+});
