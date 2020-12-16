@@ -30,6 +30,18 @@
     {
       "name": "User",
       "description": "API for aunthentication and access"
+    },
+    {
+      "name": "Class",
+      "description": "API for class activities"
+    },
+    {
+      "name": "Lesson",
+      "description": "API for lessons in a class"
+    },
+    {
+      "name": "Resources",
+      "description": "API for lesson resources"
     }
   ],
     "consumes": [
@@ -146,12 +158,10 @@
       "description": "Changes the password of the user. Takes a s",
         "parameters": [
           {
-            "name": "data",
+            "name": "password",
             "in": "body",
             "required": "true",
-            "schema": {
-              "$ref": "#/definitions/Password"
-            }
+            "type": "string"
         }
       ],
         "produces": ["application/json"],
@@ -512,6 +522,86 @@
         }
       ]
     }
+  },
+  "/lessons/{lessonId}/resources": {
+    "post": {
+      "tags": ["Resources"],
+      "summary": "Add add either pdf or video ressources to lessons",
+      "description": "Allow teachers to add resources to lessons endpoint.",
+      "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+      "parameters": [
+        {
+          "name": "lessonId",
+          "in": "path",
+          "description": "The lesson Id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "files",
+          "in": "formData",
+          "description": "file to upload",
+          "required": true,
+          "type": "file"
+        },
+        {
+          "name": "title",
+          "in": "body",
+          "description": "title of file",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "in": "body",
+          "description": "type of file",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "responses": {
+        "201": {
+          "description": "successful operation"
+        },
+        "400": {
+          "description": "Bad request"
+        },
+        "401": {
+          "description": "unathorize request"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+  },
+  "/resources/grade": {
+    "get": {
+      "tags": ["Resources"],
+      "summary": "It retrieves resources according to class grade",
+      "description": "Protected route. retrieves resources according to class grade from the database",       
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "successful operation"
+        },
+        "400": {
+          "description": "error"
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
   }
   },
   "definitions": {
@@ -591,33 +681,6 @@
         "password": "johnnixace"
       }
     },
-      "User": {
-      "required": [
-        "email", "password"
-      ],
-      "properties": {
-        "_id": {
-          "type": "string",
-          "description": "The auto-generated id of the user."
-        },
-        "name": {
-          "type": "string",
-          "description": "The name of your user."
-        },
-        "email": {
-          "type": "string",
-          "description": "The email of your user."
-        },
-        "password": {
-          "type": "string",
-          "description": "The password of your user."
-        }
-      },
-      "example": {
-        "email": "johnDoe@gmail.com",
-        "password": "johnnixace"
-      }
-    },
     "Class": {
       "required": [
         "schedules", "grade", "subject" 
@@ -674,13 +737,31 @@
         "body": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostru exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
       }
     },
-    "Password": {
-      "required": ["password"],
+    "User": {
+      "required": [
+        "email", "password"
+      ],
       "properties": {
+        "_id": {
+          "type": "string",
+          "description": "The auto-generated id of the user."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of your user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email of your user."
+        },
         "password": {
           "type": "string",
-          "description": "The new password"
+          "description": "The password of your user."
         }
+      },
+      "example": {
+        "email": "johnDoe@gmail.com",
+        "password": "johnnixace"
       }
     }
   }

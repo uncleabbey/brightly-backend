@@ -27,7 +27,9 @@ export const registerStudent = async (req, res, next) => {
     await Promise.all(
       // eslint-disable-next-line array-callback-return
       classes.map((cla) => {
+        /* istanbul ignore if */
         cla.students.push(user._id);
+        /* istanbul ignore if */
         cla.save();
       })
     );
@@ -168,6 +170,7 @@ export const changePassword = async (req, res, next) => {
     const message = "password was changed successfully";
     return successResponse(res, 200, message);
   } catch (error) {
+    /* istanbul ignore if */
     return next({
       status: 500,
       error,
