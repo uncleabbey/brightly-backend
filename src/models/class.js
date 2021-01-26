@@ -71,7 +71,7 @@ const lessonSchema = new Schema(
     objective: {
       type: String,
       required: true,
-      default: "The lesson will enable students to"
+      default: "The lesson will enable the students to"
     }
   },
   { timestamps: true }
