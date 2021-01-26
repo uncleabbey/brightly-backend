@@ -68,6 +68,11 @@ const lessonSchema = new Schema(
         ref: "Comment",
       },
     ],
+    objective: {
+      type: String,
+      required: true,
+      default: "The lesson will enable students to"
+    }
   },
   { timestamps: true }
 );
