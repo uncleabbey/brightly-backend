@@ -72,7 +72,15 @@ const lessonSchema = new Schema(
       type: String,
       required: true,
       default: "The lesson will enable the students to"
-    }
+    },
+     startTime: {
+    type: Number,
+    required: true,
+  },
+  endTime: {
+    type: Number,
+    required: true,
+  },
   },
   { timestamps: true }
 );
@@ -117,11 +125,11 @@ const timeTableSchema = new Schema({
     ref: "Class",
   },
   startTime: {
-    type: Number,
+    type: String,
     required: true,
   },
   endTime: {
-    type: Number,
+    type: String,
     required: true,
   },
 });

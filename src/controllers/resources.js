@@ -78,7 +78,7 @@ export const getResourcesById = async (req, res, next) => {
 export const getResources = async (req, res, next) => {
   try {
     const { grade } = req.user;
-    console.log(grade)
+    console.log("========> ", typeof grade)
     // const resources = await Resources.find().populate("lesson");
     const resources = await Resources.find().populate({
       path: "lesson",
@@ -87,6 +87,7 @@ export const getResources = async (req, res, next) => {
         path: "class"
       }
     })
+    // console.log("======> ", resources)
       const resourcesByGrade = resources.filter(resource => resource.lesson.class.grade === grade)
       const message = "resources retrieved successfully";
       return successResponse(res, 200, message, { resourcess: resourcesByGrade });
